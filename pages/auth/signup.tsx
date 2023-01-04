@@ -16,7 +16,6 @@ export default SignUpPage;
 const Container = styled.div`
   width: 100%;
   height: 100vh;
-  /* background-color: ; */
   display: flex;
   flex-direction: column;
   justify-content: center;

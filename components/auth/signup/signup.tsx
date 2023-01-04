@@ -1,29 +1,30 @@
+import { Aldrich } from "@next/font/google";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import styled from "styled-components";
 import customAxios from "../../../lib/customAxios";
 
+interface IFormInput {
+  email: string;
+  password: string;
+}
 const SignUp = () => {
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting, errors, isDirty, isSubmitSuccessful },
+    formState: { errors, isDirty, isValid },
   } = useForm<IFormInput>();
-  const router = useRouter();
 
-  interface IFormInput {
-    email: string;
-    password: string;
-  }
+  const router = useRouter();
 
   const signUp: SubmitHandler<IFormInput> = async (data) => {
     try {
       await customAxios.post("/users/create", data);
+      alert("회원가입에 성공하였습니다");
       router.push("/auth/login");
     } catch (error: any) {
       alert(error.response.data.details);
-      console.log(error);
     }
   };
 
@@ -65,7 +66,11 @@ const SignUp = () => {
             <small role="alert">{errors.password.message}</small>
           )}
         </div>
-        <input type="submit" disabled={isSubmitSuccessful} value={"회원가입"} />
+        <input
+          type="submit"
+          disabled={!isDirty || !isValid}
+          value={"회원가입"}
+        />
       </form>
     </Wrapper>
   );
