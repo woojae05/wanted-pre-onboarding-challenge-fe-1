@@ -37,7 +37,11 @@ const Login = () => {
         {...register("email", { required: "이메일은 필수 입력입니다." })}
         placeholder={"test@gmail.com"}
       />
-      <input type="text" {...register("password")} placeholder={"********"} />
+      <input
+        type="password"
+        {...register("password")}
+        placeholder={"********"}
+      />
       <input type="submit" value={"로그인"} disabled={!isDirty || !isValid} />
     </LoginForm>
   );
