@@ -2,7 +2,7 @@ import axios from 'axios';
 
 
 const customAxios = axios.create({
-    baseURL: "http://localhost:8080",
+    baseURL: "http://15.164.96.221:8080",
 });
 
 export default customAxios;
