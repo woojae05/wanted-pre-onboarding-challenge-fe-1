@@ -1,34 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
 import customAxios from "../../../lib/customAxios";
 import { useRouter } from "next/router";
+import { AuthContext } from "../../../context/auth/AuthContext";
+import { useLogin } from "./useLogin.hooks";
+import { IFormInput } from "../../../types/Form/Form.type";
 import { useForm, SubmitHandler } from "react-hook-form";
 
-interface IFormInput {
-  email: string;
-  password: string;
-}
-
 const Login = () => {
-  const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { isDirty, isValid },
   } = useForm<IFormInput>();
 
-  const login: SubmitHandler<IFormInput> = async (data) => {
-    try {
-      const {
-        data: { token, message },
-      } = await customAxios.post("/users/login", data);
-      localStorage.setItem("token", token);
-      alert(message);
-      router.push("/");
-    } catch (error: any) {
-      alert(error.response.data.details);
-    }
-  };
+  const { login } = useLogin();
 
   return (
     <LoginForm onSubmit={handleSubmit(login)}>

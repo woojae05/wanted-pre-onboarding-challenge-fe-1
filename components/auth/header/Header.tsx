@@ -1,27 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { AuthContext, IAuthContext } from "../../../context/auth/AuthContext";
 import styled from "styled-components";
+import { useHeader } from "./useHeader.hooks";
 import Link from "next/link";
 
 const Header = () => {
-  const [token, setToken] = useState<string | null>(null);
-
-  useEffect(() => {
-    setToken(localStorage.getItem("token"));
-  }, []);
+  const { isLogin, logout } = useHeader();
 
   return (
     <Wrapper>
       <Link href={"/"}>
         <h1>TODO</h1>
       </Link>
-      {token ? (
-        <button
-          onClick={() => {
-            localStorage.removeItem("token");
-          }}
-        >
-          로그아웃
-        </button>
+      {isLogin ? (
+        <button onClick={logout}>로그아웃</button>
       ) : (
         <div>
           <Link href={"/auth/login"}>
