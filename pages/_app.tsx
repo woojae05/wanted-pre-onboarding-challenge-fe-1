@@ -1,14 +1,16 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
-import React from "react";
+import React, { useState } from "react";
 import Header from "../components/auth/header/Header";
+import { AuthContext } from "../context/auth/AuthContext";
+import { AuthDataType } from "../types/Auth.type";
 
 export default function App({ Component, pageProps }: AppProps) {
-  const MyStore = React.createContext(false);
+  const [auth, setAuth] = useState(false);
   return (
-    <MyStore.Provider value>
+    <AuthContext.Provider value={{ auth, setAuth }}>
       <Header />
       <Component {...pageProps} />
-    </MyStore.Provider>
+    </AuthContext.Provider>
   );
 }
