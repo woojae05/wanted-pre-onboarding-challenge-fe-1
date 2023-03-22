@@ -1,8 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
-import customAxios from "../../../lib/customAxios";
-import { useRouter } from "next/router";
-import { AuthContext } from "../../../context/auth/AuthContext";
 import { useLogin } from "./useLogin.hooks";
 import { IFormInput } from "../../../types/Form/Form.type";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -14,10 +11,14 @@ const Login = () => {
     formState: { isDirty, isValid },
   } = useForm<IFormInput>();
 
-  const { login } = useLogin();
+  const { loginPostMutate } = useLogin();
 
   return (
-    <LoginForm onSubmit={handleSubmit(login)}>
+    <LoginFormContainer
+      onSubmit={handleSubmit(({ email, password }) => {
+        loginPostMutate({ email, password });
+      })}
+    >
       <input
         type="text"
         {...register("email", { required: "이메일은 필수 입력입니다." })}
@@ -29,13 +30,13 @@ const Login = () => {
         placeholder={"********"}
       />
       <input type="submit" value={"로그인"} disabled={!isDirty || !isValid} />
-    </LoginForm>
+    </LoginFormContainer>
   );
 };
 
 export default Login;
 
-const LoginForm = styled.form`
+const LoginFormContainer = styled.form`
   height: 200px;
   display: flex;
   flex-direction: column;

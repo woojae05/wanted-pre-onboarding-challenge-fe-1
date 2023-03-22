@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import styled from "styled-components";
+import { useSignUp } from "./signUp.hooks";
 import customAxios from "../../../lib/customAxios";
 
 interface IFormInput {
@@ -16,21 +17,25 @@ const SignUp = () => {
     formState: { errors, isDirty, isValid },
   } = useForm<IFormInput>();
 
-  const router = useRouter();
+  const { signUpMutate } = useSignUp();
 
-  const signUp: SubmitHandler<IFormInput> = async (data) => {
-    try {
-      await customAxios.post("/users/create", data);
-      alert("회원가입에 성공하였습니다");
-      router.push("/auth/login");
-    } catch (error: any) {
-      alert(error.response.data.details);
-    }
-  };
+  // const signUp: SubmitHandler<IFormInput> = async (data) => {
+  //   try {
+  //     await customAxios.post("/users/create", data);
+  //     alert("회원가입에 성공하였습니다");
+  //     router.push("/auth/login");
+  //   } catch (error: any) {
+  //     alert(error.response.data.details);
+  //   }
+  // };
 
   return (
     <Wrapper>
-      <form onSubmit={handleSubmit(signUp)}>
+      <form
+        onSubmit={handleSubmit(({ email, password }) => {
+          signUpMutate({ email, password });
+        })}
+      >
         <div>
           <input
             aria-invalid={
